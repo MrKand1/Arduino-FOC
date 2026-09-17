@@ -650,6 +650,9 @@ void Commander::target(FOCMotor* motor,  char* user_cmd, char* separator){
         }
       }
       break;
+    case MotionControlType::custom: // custom control, just set the target without parsing the additional values
+      motor->target = atof(user_cmd);
+      break;
   }
   printVerbose(F("Target: "));
   println(motor->target);
