@@ -38,7 +38,7 @@ set(SIMPLEFOC_SRCS
 idf_component_register(
     SRCS ${SIMPLEFOC_SRCS}
     INCLUDE_DIRS "src"
-    REQUIRES arduino
+    REQUIRES espressif__arduino-esp32
 )
 
 # Suppress strict warnings for third-party SimpleFOC library
