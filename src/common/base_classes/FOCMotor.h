@@ -207,21 +207,26 @@ class FOCMotor
     int tuneCurrentController(float bandwidth);
 
     // state variables
+    // Zero-initialised here because the constructor does not set them, and a
+    // motor that lives in heap memory (new) would otherwise start with whatever
+    // bytes were there. feed_forward_voltage is added to every voltage-mode
+    // command in loopFOC(), so garbage there is a permanent torque offset and
+    // d-axis voltage: it skews commutation and can reverse the torque outright.
     float target; //!< current target value - depends of the controller
     float feed_forward_velocity = 0.0f; //!< current feed forward velocity
-  	float shaft_angle;//!< current motor angle
-  	float electrical_angle;//!< current electrical angle
-  	float shaft_velocity;//!< current motor velocity 
+  	float shaft_angle = 0.0f;//!< current motor angle
+  	float electrical_angle = 0.0f;//!< current electrical angle
+  	float shaft_velocity = 0.0f;//!< current motor velocity
     float current_sp;//!< target current ( q current )
-    float shaft_velocity_sp;//!< current target velocity
-    float shaft_angle_sp;//!< current target angle
+    float shaft_velocity_sp = 0.0f;//!< current target velocity
+    float shaft_angle_sp = 0.0f;//!< current target angle
     DQVoltage_s voltage;//!< current d and q voltage set to the motor
     DQCurrent_s current;//!< current d and q current measured
     float voltage_bemf; //!< estimated backemf voltage (if provided KV constant)
     float	Ualpha, Ubeta; //!< Phase voltages U alpha and U beta used for inverse Park and Clarke transform
 
-    DQCurrent_s feed_forward_current;//!< current d and q current measured
-    DQVoltage_s feed_forward_voltage;//!< current d and q voltage set to the motor
+    DQCurrent_s feed_forward_current{0.0f, 0.0f};//!< current d and q current measured
+    DQVoltage_s feed_forward_voltage{0.0f, 0.0f};//!< current d and q voltage set to the motor
 
     // motor configuration parameters
     float voltage_sensor_align;//!< sensor and motor align voltage parameter
